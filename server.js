@@ -337,7 +337,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Store farm data and extract latitude & longitude
-app.post("/submit-farm-data", upload.array("reports"), async (req, res) => {
+app.post("/api/submit-farm-data", upload.array("reports"), async (req, res) => {
     try {
         const { username, area, measureScale, soilType, address, city, pincode, contactNum, markerPosition } = req.body;
 
@@ -381,7 +381,7 @@ app.post("/submit-farm-data", upload.array("reports"), async (req, res) => {
     }
 });
 
-app.post("/store-merged-data", async (req, res) => {
+app.post("/api/store-merged-data", async (req, res) => {
     try {
         console.log("Received Payload:", JSON.stringify(req.body, null, 2));
 
