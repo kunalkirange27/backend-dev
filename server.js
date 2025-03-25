@@ -404,7 +404,7 @@ app.post("/store-merged-data", async (req, res) => {
 });
 
 
-app.get("/test", (req, res) => {
+app.get("/api/test", (req, res) => {
     res.send("Server is running!");
 });
 
