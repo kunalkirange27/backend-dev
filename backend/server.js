@@ -403,9 +403,9 @@ app.post("/store-merged-data", async (req, res) => {
     }
 });
 
-module.exports = (req, res) => {
+app.get("/", (req, res) => {
     res.send("Server is running!");
-};
+});
 
 
 app.listen(port, () => {
