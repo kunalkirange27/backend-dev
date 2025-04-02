@@ -298,7 +298,8 @@ const farmDataSchema = new mongoose.Schema({
     username: String,
     area: String,
     measureScale: String,
-    soilType: String,
+    // soilType: String,
+    previousCrops: Array,
     address: String,
     city: String,
     pincode: String,
@@ -339,17 +340,23 @@ const upload = multer({ storage: storage });
 // Store farm data and extract latitude & longitude
 app.post("/api/submit-farm-data", upload.array("reports"), async (req, res) => {
     try {
-        const { username, area, measureScale, soilType, address, city, pincode, contactNum, markerPosition } = req.body;
+        const { username, area, measureScale, previousCrops, address, city, pincode, contactNum, markerPosition } = req.body;
 
         if (!markerPosition) {
             return res.status(400).json({ message: "Marker position is required" });
         }
 
-        let parsedMarkerPosition;
+        let parsedMarkerPosition, historical_crops;
         try {
             parsedMarkerPosition = JSON.parse(markerPosition);
         } catch (error) {
             return res.status(400).json({ message: "Invalid marker position format" });
+        }
+
+        try {
+            historical_crops = JSON.parse(previousCrops)
+        } catch (error) {
+            return res.status(400).json({ message: "Something went wrong..." });
         }
 
         const { lat, lng } = parsedMarkerPosition;
@@ -363,7 +370,7 @@ app.post("/api/submit-farm-data", upload.array("reports"), async (req, res) => {
             username,
             area,
             measureScale,
-            soilType,
+            previousCrops: historical_crops,
             address,
             city,
             pincode,
