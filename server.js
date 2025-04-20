@@ -414,7 +414,7 @@ app.post("/api/store-merged-data", async (req, res) => {
 
 
 // Route: /forecast?lat=...&lon=...
-app.get('/forecast', async (req, res) => {
+app.get('/api/forecast', async (req, res) => {
     const { lat, lon } = req.query;
   
     if (!lat || !lon) {
