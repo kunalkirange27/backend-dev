@@ -413,6 +413,41 @@ app.post("/api/store-merged-data", async (req, res) => {
 });
 
 
+// Route: /forecast?lat=...&lon=...
+app.get('/forecast', async (req, res) => {
+    const { lat, lon } = req.query;
+  
+    if (!lat || !lon) {
+      return res.status(400).json({ error: 'Latitude and longitude are required' });
+    }
+  
+    const API_KEY = '6ceabbca9d90802732987e8ea40412cd';
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+  
+    try {
+      const response = await axios.get(forecastUrl);
+      const forecastData = response.data;
+  
+      res.json({
+        city: forecastData.city.name,
+        country: forecastData.city.country,
+        forecasts: forecastData.list.map(f => ({
+          datetime: f.dt_txt,
+          temperature: f.main.temp,
+          weather: f.weather[0].main,
+          description: f.weather[0].description,
+          humidity: f.main.humidity,
+          windSpeed: f.wind.speed,
+        }))
+      });
+    } catch (error) {
+      console.error('Error fetching forecast:', error.message);
+      res.status(500).json({ error: 'Failed to fetch weather forecast' });
+    }
+  });
+  
+
+
 app.get("/api/test", (req, res) => {
     res.send("Server is running!");
 });
